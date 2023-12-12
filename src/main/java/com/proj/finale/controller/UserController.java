@@ -3,6 +3,8 @@ package com.proj.finale.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,8 @@ import com.proj.finale.entity.User;
 import com.proj.finale.entity.UserLoginRequest;
 import com.proj.finale.service.UserService;
 
-@RestController
 @CrossOrigin(origins = "*")
+@RestController
 public class UserController {
 	
 	@Autowired
@@ -51,25 +53,24 @@ public class UserController {
 	
 	////////////////////////LogIn//////////////////////////
 	
-    @PostMapping("/login")
-    public Optional<User> login(@RequestBody UserLoginRequest userLoginRequest) {
-        // Validate user credentials
-        String email = userLoginRequest.getEmail();
-        String password = userLoginRequest.getPassword();
+	@PostMapping("/login")
+	public ResponseEntity<User> login(@RequestBody UserLoginRequest userLoginRequest) {
+	    // Validate user credentials
+	    String email = userLoginRequest.getEmail();
+	    String password = userLoginRequest.getPassword();
 
-        Optional<User> user = userservice.findByEmailAndPassword(email, password);
-        
-        
+	    Optional<User> userOptional = userservice.findByEmailAndPassword(email, password);
 
-        if (user != null) {
-            System.out.println("Login successful");
-            // Authentication successful
-            // You may generate a token or set up a session here
-            return user;
-        } else {
-            return null;
-        }
-        
-    }
+	    if (userOptional.isPresent()) {
+	        User user = userOptional.get();
+	        System.out.println("Login successful");
+	        // Authentication successful
+	        // You may generate a token or set up a session here
+	        return ResponseEntity.ok(user);
+	    } else {
+	        // Authentication failed
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	    }
+	}
 
 }
