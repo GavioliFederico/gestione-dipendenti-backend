@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,17 @@ public class UserController {
 		return userservice.getAllUser();
 	}
 	
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        Optional<User> user = userservice.getUser(id);
+
+        if (user.isPresent()) {
+            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+	
 	@DeleteMapping("/deleteUser/{id}")
 	public void deleteUser(@PathVariable Integer id) {
 		userservice.deleteUserById(id);
@@ -47,9 +59,26 @@ public class UserController {
 		return newUser;
 	}
 	
-	//////////!!!!!!!!!!!!!!!!!//////////
-	
-	//modifica utente
+    @PutMapping("/users/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
+        Optional<User> existingUser = userservice.getUser(id);
+
+        if (existingUser.isPresent()) {
+            User userToUpdate = existingUser.get();
+
+            userToUpdate.setEmail(updatedUser.getEmail());
+            userToUpdate.setPassword(updatedUser.getPassword());
+            userToUpdate.setName(updatedUser.getName());
+            userToUpdate.setSurname(updatedUser.getSurname());
+            userToUpdate.setRole(updatedUser.getRole());
+
+            User updatedUserEntity = userservice.editUser(userToUpdate);
+
+            return new ResponseEntity<>(updatedUserEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 	
 	////////////////////////LogIn//////////////////////////
 	

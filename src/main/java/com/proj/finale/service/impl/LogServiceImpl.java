@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.proj.finale.entity.Log;
+import com.proj.finale.entity.User;
 import com.proj.finale.repository.LogRepository;
 import com.proj.finale.service.LogService;
 
@@ -35,9 +36,25 @@ public class LogServiceImpl implements LogService{
 		return logrepository.save(newLog);
 	}
 
+    @Override
+    public List<Log> getLogsByUserId(int userId) {
+    	return logrepository.findByUserId(userId);
+    }
+
+    @Override
+    public Log updateLog(Log log) {
+        // Verifica se il log esiste nel database prima di aggiornarlo
+        if (logrepository.existsById(log.getId())) {
+            return logrepository.save(log);
+        } else {
+           return null;
+           // throw new LogNotFoundException("Log not found with ID: " + log.getId());
+        }
+    }
 	@Override
-	public Optional<Log> getLogById(Integer logId) {
+	public Optional<Log> getLogById(int logId) {
 		return logrepository.findById(logId);
 	}
+
 
 }
