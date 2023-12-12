@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.proj.finale.entity.Log;
 import com.proj.finale.entity.LogRequest;
+import com.proj.finale.entity.LogResponse;
 import com.proj.finale.service.LogService;
 import com.proj.finale.service.UserService;
 import com.proj.finale.entity.User;
@@ -60,7 +63,7 @@ public class LogController {
 	}
 	
 	@PutMapping("/log/update/{logId}")
-	public ResponseEntity<Log> updateExitTime(@PathVariable int logId, @RequestBody Map<String, String> requestBody) {
+	public ResponseEntity<LogResponse> updateExitTime(@PathVariable int logId, @RequestBody Map<String, String> requestBody) {
 	    Optional<Log> optionalLog = logservice.getLogById(logId);
 
 	    if (optionalLog.isPresent()) {
@@ -69,22 +72,31 @@ public class LogController {
 	        logToUpdate.setExit_time(Timestamp.valueOf(exitTime));
 
 	        Log updatedLog = logservice.updateLog(logToUpdate);
-	        return new ResponseEntity<>(updatedLog, HttpStatus.OK);
+
+	        // Creazione di un oggetto di risposta specifico per il log modificato
+	        LogResponse logResponse = new LogResponse(updatedLog);
+
+	        return new ResponseEntity<>(logResponse, HttpStatus.OK);
 	    } else {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	}
 	
-    @GetMapping("/logs/user/{userId}")
-    public ResponseEntity<List<Log>> getLogsByUserId(@PathVariable int userId) {
-        List<Log> userLogs = logservice.getLogsByUserId(userId);
+	@GetMapping("/logs/user/{userId}")
+	public ResponseEntity<List<LogResponse>> getLogsByUserId(@PathVariable int userId) {
+	    List<Log> userLogs = logservice.getLogsByUserId(userId);
 
-        if (!userLogs.isEmpty()) {
-            return new ResponseEntity<>(userLogs, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+	    if (!userLogs.isEmpty()) {
+	        // Mappa la lista di Log a una lista di LogResponse
+	        List<LogResponse> logResponses = userLogs.stream()
+	                .map(LogResponse::new)
+	                .collect(Collectors.toList());
+
+	        return new ResponseEntity<>(logResponses, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
 
 
 }
