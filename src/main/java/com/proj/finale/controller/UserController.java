@@ -53,6 +53,7 @@ public class UserController {
 	
 	////////////////////////LogIn//////////////////////////
 	
+	
 	@PostMapping("/login")
 	public ResponseEntity<User> login(@RequestBody UserLoginRequest userLoginRequest) {
 	    // Validate user credentials
@@ -61,15 +62,16 @@ public class UserController {
 
 	    Optional<User> userOptional = userservice.findByEmailAndPassword(email, password);
 
-	    if (userOptional != null) {
+	    if (userOptional.isPresent()) {
 	        User user = userOptional.get();
 	        System.out.println("Login successful");
 	      
 	        return ResponseEntity.ok(user);
 	    } else {
-	       
+	    	System.out.println("ansheloo");
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	    }
 	}
+	
 
 }
