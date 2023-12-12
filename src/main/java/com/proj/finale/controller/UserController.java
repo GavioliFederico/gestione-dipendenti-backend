@@ -35,8 +35,8 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/deleteUser/{id}")
-	public void deleteUser(@PathVariable Integer Id) {
-		userservice.deleteUserById(Id);
+	public void deleteUser(@PathVariable Integer id) {
+		userservice.deleteUserById(id);
 	}
 	
 	@PostMapping("/users/new")
