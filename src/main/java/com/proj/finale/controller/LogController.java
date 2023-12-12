@@ -54,7 +54,7 @@ public class LogController {
 		
 		Log newLog = new Log();
 		newLog.setEntry_time(logrequest.getEntry_time());
-		newLog.setExit_time(logrequest.getEntry_time());
+		//newLog.setExit_time(logrequest.getEntry_time());
 		
 		newLog.setUser(user.orElseThrow());
 		
