@@ -61,7 +61,8 @@ public class UserController {
 	    String password = userLoginRequest.getPassword();
 
 	    Optional<User> userOptional = userservice.findByEmailAndPassword(email, password);
-
+	    System.out.println(email);
+	    System.out.println(password);
 	    if (userOptional.isPresent()) {
 	        User user = userOptional.get();
 	        System.out.println("Login successful");
