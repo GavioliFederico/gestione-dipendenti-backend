@@ -1,5 +1,6 @@
 package com.proj.finale.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,17 @@ public class UserController {
 
         if (user.isPresent()) {
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/users/employees")
+    public ResponseEntity<List<User>> getEmployeeUsers() {
+        List<User> employeeUsers = userservice.getUsersByRole("employee");
+
+        if (!employeeUsers.isEmpty()) {
+            return new ResponseEntity<>(employeeUsers, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -18,5 +18,7 @@ public interface UserService {
 	Optional<User> getUser(Integer Id);
 	
 	Optional<User> findByEmailAndPassword(String email,String password);
+	
+	List<User> getUsersByRole(String role);
 
 }
