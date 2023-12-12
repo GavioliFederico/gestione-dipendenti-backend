@@ -61,14 +61,13 @@ public class UserController {
 
 	    Optional<User> userOptional = userservice.findByEmailAndPassword(email, password);
 
-	    if (userOptional.isPresent()) {
+	    if (userOptional != null) {
 	        User user = userOptional.get();
 	        System.out.println("Login successful");
-	        // Authentication successful
-	        // You may generate a token or set up a session here
+	      
 	        return ResponseEntity.ok(user);
 	    } else {
-	        // Authentication failed
+	       
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	    }
 	}
