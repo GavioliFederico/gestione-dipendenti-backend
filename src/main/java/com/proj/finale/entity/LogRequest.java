@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 
 public class LogRequest {
 	
-	private Timestamp entry_time;
+	private Timestamp entryTime;
 	
-	private Timestamp exit_time;
+	private Timestamp exitTime;
 
 	////////////////////Constructor///////////////////
 	
@@ -16,33 +16,33 @@ public class LogRequest {
 	
 	public LogRequest(Timestamp entry_time, Timestamp exit_time) {
 		super();
-		this.entry_time = entry_time;
-		this.exit_time = exit_time;
+		this.entryTime = entry_time;
+		this.exitTime = exit_time;
 	}
 	
 	////////////////////Setters-Getters///////////////////
 	
 	public Timestamp getEntry_time() {
-		return entry_time;
+		return entryTime;
 	}
 
 	public void setEntry_time(Timestamp entry_time) {
-		this.entry_time = entry_time;
+		this.entryTime = entry_time;
 	}
 
 	public Timestamp getExit_time() {
-		return exit_time;
+		return exitTime;
 	}
 
 	public void setExit_time(Timestamp exit_time) {
-		this.exit_time = exit_time;
+		this.exitTime = exit_time;
 	}
 	
 	////////////////////To-String///////////////////
 	
 	@Override
 	public String toString() {
-		return "LogRequest [entry_time=" + entry_time + ", exit_time=" + exit_time + "]";
+		return "LogRequest [entry_time=" + entryTime + ", exit_time=" + exitTime + "]";
 	}
 
 }

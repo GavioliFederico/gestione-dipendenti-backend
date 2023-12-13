@@ -97,6 +97,20 @@ public class LogController {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	}
+	
+    ////////////////////////Last-log-User//////////////////////////    
+    
+    @GetMapping("/lastlog/user/{userId}")
+    public ResponseEntity<LogResponse> getLastLogForUser(@PathVariable int userId) {
+        LogResponse lastLog = logservice.getLastLogForUser(userId);
 
+        if (lastLog != null) {
+            return ResponseEntity.ok(lastLog);
+        } else {
+            // Puoi restituire un 404 Not Found se non esiste alcun log per l'utente
+            return ResponseEntity.notFound().build();
+        }
+    }
 
+	
 }

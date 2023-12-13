@@ -2,6 +2,7 @@ package com.proj.finale.entity;
 
 import java.sql.Timestamp;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,9 +19,11 @@ public class Log {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	private Timestamp entry_time;
+	@Column(name = "entry_time")
+	private Timestamp entryTime;
 	
-	private Timestamp exit_time;
+	@Column(name = "exit_time")
+	private Timestamp exitTime;
 	
 	//////////////////////Foreign-key/////////////////////////////
 	
@@ -37,8 +40,8 @@ public class Log {
 	public Log(int id, Timestamp entry_time, Timestamp exit_time, User user) {
 		super();
 		this.id = id;
-		this.entry_time = entry_time;
-		this.exit_time = exit_time;
+		this.entryTime = entry_time;
+		this.exitTime = exit_time;
 		this.user = user;
 	}
 	
@@ -53,19 +56,19 @@ public class Log {
 	}
 
 	public Timestamp getEntry_time() {
-		return entry_time;
+		return entryTime;
 	}
 
 	public void setEntry_time(Timestamp entry_time) {
-		this.entry_time = entry_time;
+		this.entryTime = entry_time;
 	}
 
 	public Timestamp getExit_time() {
-		return exit_time;
+		return exitTime;
 	}
 
 	public void setExit_time(Timestamp exit_time) {
-		this.exit_time = exit_time;
+		this.exitTime = exit_time;
 	}
 
 	public User getUser() {
@@ -80,7 +83,7 @@ public class Log {
 	
 	@Override
 	public String toString() {
-		return "Log [entry_time=" + entry_time + ", exit_time=" + exit_time + ", user=" + user + "]";
+		return "Log [entry_time=" + entryTime + ", exit_time=" + exitTime + ", user=" + user + "]";
 	}
 
 }

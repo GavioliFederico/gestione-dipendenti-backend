@@ -50,8 +50,4 @@ public class LogResponse {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-
-
-    
-    
 }

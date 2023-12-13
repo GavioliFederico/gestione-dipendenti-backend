@@ -1,9 +1,11 @@
 package com.proj.finale.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 import com.proj.finale.entity.Log;
+import com.proj.finale.entity.LogResponse;
 import com.proj.finale.entity.User;
 
 public interface LogService {
@@ -19,6 +21,8 @@ public interface LogService {
 	Log updateLog(Log logToUpdate);
 
 	Optional<Log> getLogById(int logId);
+
+	LogResponse getLastLogForUser(int userId);
 	
 	//remove log? inutile?
 
