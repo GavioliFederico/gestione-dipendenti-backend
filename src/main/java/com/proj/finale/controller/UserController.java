@@ -151,8 +151,8 @@ public class UserController {
         if (existingUser.isPresent()) {
             User userToUpdate = existingUser.get();
 
-            // Verifica se la password è stata modificata
-            if (!updatedUser.getPassword().equals(userToUpdate.getPassword())) {
+            // Verifica se la password è stata fornita e se è diversa dalla password attuale
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().equals(userToUpdate.getPassword())) {
                 // Hasha la nuova password prima di aggiornarla nel database
                 String hashedPassword = PasswordUtils.hashPassword(updatedUser.getPassword());
                 userToUpdate.setPassword(hashedPassword);
