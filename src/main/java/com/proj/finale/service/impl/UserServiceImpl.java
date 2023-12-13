@@ -65,4 +65,10 @@ public class UserServiceImpl implements UserService{
 	    return userrepository.findByRole(role);
 	}
 
+	@Override
+	public Optional<User> findByEmail(String email) {
+		Optional<User> user = userrepository.findByEmail(email);
+		return user;
+	}
+
 }

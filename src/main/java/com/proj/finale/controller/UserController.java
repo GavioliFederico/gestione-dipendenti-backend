@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.proj.finale.entity.PasswordUtils;
 import com.proj.finale.entity.User;
 import com.proj.finale.entity.UserLoginRequest;
 import com.proj.finale.service.UserService;
@@ -25,6 +26,9 @@ public class UserController {
 	
 	@Autowired
 	UserService userservice;
+	
+    @Autowired
+    PasswordUtils passwordutils;
 
 	public UserController(UserService userservice) {
 		super();
@@ -66,11 +70,28 @@ public class UserController {
 		userservice.deleteUserById(Id);
 	}
 	
+    ////////////////////////New//////////////////////////
+	
+	/*
 	@PostMapping("/users/new")
 	public User newUser(@RequestBody(required=true)User newUser) {
 		newUser=userservice.saveUser(newUser);
 		return newUser;
 	}
+	*/
+	
+    ////////////////////////New-Hash//////////////////////////
+	
+    @PostMapping("/users/new")
+    public User newUser(@RequestBody(required=true) User newUser) {
+        // Hasha la password prima di salvarla nel database
+        String hashedPassword = passwordutils.hashPassword(newUser.getPassword());
+        newUser.setPassword(hashedPassword);
+
+        newUser = userservice.saveUser(newUser);
+        return newUser;
+    }
+	
 	
     @PutMapping("/users/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
@@ -95,7 +116,7 @@ public class UserController {
 	
 	////////////////////////LogIn//////////////////////////
 	
-	
+	/*
 	@PostMapping("/login")
 	public ResponseEntity<User> login(@RequestBody UserLoginRequest userLoginRequest) {
 	    // Validate user credentials
@@ -115,6 +136,30 @@ public class UserController {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	    }
 	}
-	
+	*/
+    
+    ////////////////////////LogIn-Hash//////////////////////////
+    
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody UserLoginRequest userLoginRequest) {
+        String email = userLoginRequest.getEmail();
+        String password = userLoginRequest.getPassword();
+
+        Optional<User> userOptional = userservice.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Dehasha la password e verifica
+            if (passwordutils.checkPassword(password, user.getPassword())) {
+                System.out.println("Login successful");
+                return ResponseEntity.ok(user);
+            } else {
+                System.out.println("Login failed");
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 
 }
