@@ -42,7 +42,9 @@ public class UserController {
 		return userservice.getAllUser();
 	}
 	
-
+	////////////////////////Get-single-user//////////////////////////
+	
+	
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         Optional<User> user = userservice.getUser(id);
@@ -53,6 +55,28 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
+    
+    ////////////////////////Get-single-user-HASH//////////////////////////
+    
+    //NON SI PUO DEHASHARE
+	
+    /*
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        Optional<User> user = userservice.getUser(id);
+
+        if (user.isPresent()) {
+            // Dehasha la password prima di restituirla
+            User userEntity = user.get();
+            userEntity.setPassword(PasswordUtils.dehashPassword(userEntity.getPassword()));
+
+            return new ResponseEntity<>(userEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    */
     
     @GetMapping("/users/employees")
     public ResponseEntity<List<User>> getEmployeeUsers() {
@@ -92,7 +116,10 @@ public class UserController {
         return newUser;
     }
 	
+    ////////////////////////Update-single-user//////////////////////////
 	
+    /*
+    
     @PutMapping("/users/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
         Optional<User> existingUser = userservice.getUser(id);
@@ -105,6 +132,37 @@ public class UserController {
             userToUpdate.setName(updatedUser.getName());
             userToUpdate.setSurname(updatedUser.getSurname());
             userToUpdate.setRole(updatedUser.getRole());
+
+            User updatedUserEntity = userservice.editUser(userToUpdate);
+
+            return new ResponseEntity<>(updatedUserEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    */
+    
+    ////////////////////////Update-single-user-HASH//////////////////////////
+    
+    @PutMapping("/users/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
+        Optional<User> existingUser = userservice.getUser(id);
+
+        if (existingUser.isPresent()) {
+            User userToUpdate = existingUser.get();
+
+            // Verifica se la password è stata modificata
+            if (!updatedUser.getPassword().equals(userToUpdate.getPassword())) {
+                // Hasha la nuova password prima di aggiornarla nel database
+                String hashedPassword = PasswordUtils.hashPassword(updatedUser.getPassword());
+                userToUpdate.setPassword(hashedPassword);
+            }
+
+            // Mantieni i valori originali se i nuovi valori sono null
+            userToUpdate.setEmail(updatedUser.getEmail() != null ? updatedUser.getEmail() : userToUpdate.getEmail());
+            userToUpdate.setName(updatedUser.getName() != null ? updatedUser.getName() : userToUpdate.getName());
+            userToUpdate.setSurname(updatedUser.getSurname() != null ? updatedUser.getSurname() : userToUpdate.getSurname());
+            userToUpdate.setRole(updatedUser.getRole() != null ? updatedUser.getRole() : userToUpdate.getRole());
 
             User updatedUserEntity = userservice.editUser(userToUpdate);
 

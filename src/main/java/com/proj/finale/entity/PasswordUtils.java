@@ -18,5 +18,11 @@ public class PasswordUtils {
         // Verifica se la password candidata corrisponde alla password hashata
         return BCrypt.checkpw(candidatePassword, hashedPassword);
     }
+    
+    public static String dehashPassword(String hashedPassword) {
+        // Nel tuo caso, se BCrypt è utilizzato per l'hashing, puoi semplicemente restituire la password hashata,
+        // poiché non è possibile dehashare la password da un hash bcrypt.
+        return hashedPassword;
+    }
 	
 }

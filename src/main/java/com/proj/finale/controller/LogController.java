@@ -73,7 +73,7 @@ public class LogController {
 
 	        Log updatedLog = logservice.updateLog(logToUpdate);
 
-	        // Creazione di un oggetto di risposta specifico per il log modificato
+	        //Creazione di un oggetto di risposta specifico per il log modificato
 	        LogResponse logResponse = new LogResponse(updatedLog);
 
 	        return new ResponseEntity<>(logResponse, HttpStatus.OK);
@@ -87,7 +87,7 @@ public class LogController {
 	    List<Log> userLogs = logservice.getLogsByUserId(userId);
 
 	    if (!userLogs.isEmpty()) {
-	        // Mappa la lista di Log a una lista di LogResponse
+	        //Mappa la lista di Log a una lista di LogResponse
 	        List<LogResponse> logResponses = userLogs.stream()
 	                .map(LogResponse::new)
 	                .collect(Collectors.toList());
