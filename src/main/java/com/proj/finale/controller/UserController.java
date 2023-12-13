@@ -20,6 +20,8 @@ import com.proj.finale.entity.User;
 import com.proj.finale.entity.UserLoginRequest;
 import com.proj.finale.service.UserService;
 
+import io.micrometer.common.util.StringUtils;
+
 @CrossOrigin(origins = "*")
 @RestController
 public class UserController {
@@ -152,7 +154,9 @@ public class UserController {
             User userToUpdate = existingUser.get();
 
             // Verifica se la password è stata fornita e se è diversa dalla password attuale
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().equals(userToUpdate.getPassword())) {
+            if (!StringUtils.isBlank(updatedUser.getPassword())) {
+            	
+            	System.out.println("nuovapassword :"+updatedUser.getPassword());
                 // Hasha la nuova password prima di aggiornarla nel database
                 String hashedPassword = PasswordUtils.hashPassword(updatedUser.getPassword());
                 userToUpdate.setPassword(hashedPassword);
